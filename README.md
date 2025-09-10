@@ -22,7 +22,7 @@ Zapper is an API for configuring and managing WhatsApp bots powered by Large Lan
 
 1. Clone the repository:
    ```
-   git clone &lt;repo-url&gt;
+   git clone https://github.com/davitostes/zapper;
    cd zapper
    ```
 
@@ -50,7 +50,7 @@ Start the API server:
 ```
 ./bin/api
 ```
-The server listens on `:8080` by default. Use endpoints like `/configure` to set up bots.
+The server listens on `:774` by default. Use endpoints like `/configure` to set up bots.
 
 For detailed API documentation, refer to the [internal/handler](internal/handler) package.
 

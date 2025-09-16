@@ -7,7 +7,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/mdp/qrterminal"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	"go.mau.fi/whatsmeow/types/events"
@@ -63,7 +62,6 @@ func ConnectClient() error {
 
 	for evt := range qrChan {
 		if evt.Event == "code" {
-			qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
 		} else {
 			fmt.Println("Login event:", evt.Event)
 		}

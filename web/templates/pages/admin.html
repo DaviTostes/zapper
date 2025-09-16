@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <title>Painel de Controle - Zapper</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@0.542.0/dist/umd/lucide.min.js"></script>
+
+  <!-- HTMX -->
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      /* slate-100 */
+    }
+
+    /* Custom scrollbar for better aesthetics */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .tab-active {
+      border-bottom-color: #10b981;
+      color: #10b981;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-100 md:flex">
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+  <aside id="sidebar" hx-get="/partials/sidebar" hx-trigger="load"
+    class="w-64 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col fixed inset-y-0 left-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0">
+
+  </aside>
+
+  <main id="main-content" hx-get="/partials/panel" hx-trigger="load" class="flex-1 flex flex-col h-screen">
+
+  </main>
+
+  <script>
+    document.addEventListener("htmx:afterRequest", function () {
+      lucide.createIcons();
+    })
+
+    let selectedInstanceName = null;
+
+    // --- Tab Navigation Logic ---
+
+    function updateTabView(activeTab) {
+      // Config Tab
+      document.getElementById('config-placeholder').classList.toggle('hidden', selectedInstanceName !== null);
+      document.getElementById('config-content').classList.toggle('hidden', selectedInstanceName === null);
+      if (selectedInstanceName) {
+        document.querySelector('#config-title span').textContent = selectedInstanceName;
+      }
+
+      // Analysis Tab
+      document.getElementById('analysis-placeholder').classList.toggle('hidden', selectedInstanceName !== null);
+      document.getElementById('analysis-content').classList.toggle('hidden', selectedInstanceName === null);
+      if (selectedInstanceName) {
+        document.querySelector('#analysis-title span').textContent = selectedInstanceName;
+      }
+    }
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabName = button.dataset.tab;
+
+        // Reset instance if navigating away from config/analysis
+        if (tabName === 'instancias') {
+          selectedInstanceName = null;
+        }
+
+        tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+        button.classList.add('tab-active');
+
+        tabContents.forEach(content => {
+          content.classList.toggle('hidden', content.id !== tabName);
+        });
+
+        updateTabView();
+      });
+    });
+
+    function selectInstanceAndSwitchTab(instanceName, targetTab) {
+      selectedInstanceName = instanceName;
+      // Find and click the correct tab button
+      document.querySelector(`.tab-button[data-tab='${targetTab}']`).click();
+    }
+
+    // --- Instance Management & Actions ---
+    const addInstanceBtn = document.getElementById('add-instance-btn');
+    const instancesGrid = document.getElementById('instances-grid');
+
+    instancesGrid.addEventListener('click', (e) => {
+      const configureButton = e.target.closest('.configure-btn');
+      const analyzeButton = e.target.closest('.analyze-btn');
+      const instanceCard = e.target.closest('.instance-card');
+
+      if (!instanceCard) return;
+
+      const instanceName = instanceCard.dataset.instanceName;
+
+      if (configureButton) {
+        selectInstanceAndSwitchTab(instanceName, 'configuracao');
+      }
+      if (analyzeButton) {
+        selectInstanceAndSwitchTab(instanceName, 'analises');
+      }
+    });
+
+    addInstanceBtn.addEventListener('click', () => {
+      const instanceName = prompt("Digite um nome para a nova instância (Ex: Marketing):");
+      if (instanceName) {
+        const newInstanceCard = document.createElement('div');
+        newInstanceCard.className = "instance-card bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col";
+        newInstanceCard.dataset.instanceName = instanceName;
+        newInstanceCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div><h3 class="font-bold text-lg text-gray-800">${instanceName}</h3><p class="text-sm text-gray-500">Não conectado</p></div>
+                        <span class="bg-yellow-100 text-yellow-700 text-xs font-semibold px-2.5 py-1 rounded-full">Leia o QR Code</span>
+                    </div>
+                    <div class="flex-grow flex items-center justify-center bg-gray-50 rounded-lg p-4"><img src="https://placehold.co/200x200/FFFFFF/333333?text=QR+Code" alt="QR Code" class="rounded-md"></div>
+                    <div class="mt-4 flex space-x-2">
+                        <button class="configure-btn w-full bg-gray-100 text-gray-700 hover:bg-gray-200 font-semibold py-2 rounded-lg text-sm">Configurar</button>
+                        <button class="analyze-btn w-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-semibold py-2 rounded-lg text-sm">Analisar</button>
+                    </div>`;
+        instancesGrid.appendChild(newInstanceCard);
+        lucide.createIcons();
+      }
+    });
+
+    // --- Bot Configuration Logic ---
+    const addKeywordBtn = document.getElementById('add-keyword-btn');
+    const keywordContainer = document.getElementById('keyword-responses-container');
+
+    addKeywordBtn.addEventListener('click', () => {
+      const newRow = document.createElement('div');
+      newRow.className = "flex flex-col sm:flex-row sm:items-start sm:space-x-4 space-y-4 sm:space-y-0 p-4 bg-gray-50 rounded-lg border";
+      newRow.innerHTML = `
+                <div class="w-full sm:w-1/3"><label class="text-sm font-medium text-gray-600">Se o usuário enviar...</label><input type="text" class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" placeholder="Ex: promoção"></div>
+                <div class="w-full sm:w-2/3"><label class="text-sm font-medium text-gray-600">O bot responde...</label><textarea rows="2" class="w-full mt-1 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" placeholder="Digite a resposta do bot"></textarea></div>
+                <button class="remove-keyword-btn text-gray-400 hover:text-red-500 pt-1 sm:pt-7 self-end sm:self-start"><i data-lucide="trash-2" class="w-5 h-5"></i></button>`;
+      keywordContainer.appendChild(newRow);
+      lucide.createIcons();
+    });
+
+    keywordContainer.addEventListener('click', (event) => {
+      if (event.target.closest('.remove-keyword-btn')) {
+        event.target.closest('.remove-keyword-btn').parentElement.remove();
+      }
+    });
+
+    // --- Analysis Tab Mobile View Logic ---
+    const chatListPanel = document.getElementById('chat-list-panel');
+    const conversationPanel = document.getElementById('conversation-panel');
+    const chatItems = document.querySelectorAll('.chat-item');
+    const backToChatsBtn = document.getElementById('back-to-chats');
+
+    function showConversation() {
+      if (window.innerWidth < 768) {
+        chatListPanel.classList.add('-translate-x-full');
+        conversationPanel.classList.remove('translate-x-full');
+      }
+    }
+
+    function showChatList() {
+      if (window.innerWidth < 768) {
+        chatListPanel.classList.remove('-translate-x-full');
+        conversationPanel.classList.add('translate-x-full');
+      }
+    }
+
+    chatItems.forEach(item => item.addEventListener('click', showConversation));
+    backToChatsBtn.addEventListener('click', showChatList);
+  </script>
+</body>
+
+</html>

@@ -25,7 +25,8 @@ func main() {
 
 	hxGroup.GET("/sidebar", handler.HandleSidebar)
 	hxGroup.GET("/panel", handler.HandlePanel)
-	hxGroup.GET("/new-instance", handler.HandleNewInstance)
+	hxGroup.GET("/panel-config", handler.HandlePanelConfig)
+	hxGroup.GET("/panel-analysis", handler.HandlePanelAnalysis)
 
 	router.Run(":" + os.Getenv("PORT"))
 }

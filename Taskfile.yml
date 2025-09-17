@@ -1,0 +1,11 @@
+# https://taskfile.dev
+
+version: '3'
+
+env:
+  PORT: "5173"
+
+tasks:
+  dev:
+    cmds:
+      - go build ./cmd/server && ./server

@@ -5,20 +5,17 @@
       <div class="text-center mb-6">
         <p class="text-gray-600 mb-4">Escaneie o QR Code com o WhatsApp para conectar a nova instância:</p>
         <div class="bg-gray-50 rounded-lg p-4 flex justify-center">
-          <img id="qr-code" src="https://placehold.co/200x200/FFFFFF/333333?text=QR+Code" alt="QR Code" class="rounded-md">
+          <img id="qr-codkj" class="rounded-md">
+          <div id="qrcode" class="rounded-md">
+
+          </div>
         </div>
         <p class="text-sm text-gray-500 mt-2">Mantenha seu telefone conectado à internet.</p>
-      </div>
-      <button hx-post="/api/generate-qr" hx-target="#qr-code" hx-swap="outerHTML" class="w-full bg-emerald-500 text-white py-2.5 rounded-lg hover:bg-emerald-600 font-semibold transition-colors">
-        <i data-lucide="refresh-cw" class="w-4 h-4 mr-2 inline"></i>
-        Gerar Novo QR Code
-      </button>
-      <div class="mt-4 text-center">
-        <a hx-get="/partials/panel" hx-target="#main-content" class="cursor-pointer text-emerald-600 hover:text-emerald-700 text-sm font-medium">Voltar ao Painel</a>
       </div>
     </div>
   </div>
 </div>
 <script>
-  lucide.createIcons();
+  new QRCode(document.getElementById("qrcode"), {{.QRCode}})
+
 </script>

@@ -14,19 +14,8 @@
 </header>
 
 {{if .IsConnected}}
-<div id="tab-content" class="tab-content flex flex-col h-full">
-  <div class="flex-0 flex flex-col sm:flex-row gap-3 pt-2 px-4 border-t border-gray-100">
-    <button hx-get="partials/panel-config" hx-target="#tab-content"
-      class="flex-1 flex items-center justify-center space-x-2 bg-green-50 text-green-700 hover:bg-green-100 font-semibold py-3 rounded-xl text-sm transition-colors border border-green-200">
-      <i data-lucide="settings" class="w-5 h-5"></i>
-      <span>Configurar</span>
-    </button>
-    <button hx-get="partials/panel-new-contact" hx-target="#tab-content"
-      class="flex-1 flex items-center justify-center space-x-2 bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold py-3 rounded-xl text-sm transition-colors border border-blue-200">
-      <i data-lucide="user-plus" class="w-5 h-5"></i>
-      <span>Novo Contato</span>
-    </button>
-  </div>
+<div id="tab-content" class="flex-1 flex flex-col overflow-hidden">
+  <div hx-get="partials/panel-cards" hx-trigger="load, every 30s" class="flex-1"></div>
 </div>
 {{else}}
 <div id="tab-content" hx-get="/partials/panel" hx-target="#main-content" hx-trigger="every 15s"

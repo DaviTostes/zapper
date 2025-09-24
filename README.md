@@ -4,17 +4,6 @@ Zapper is an open source web app for configuring and managing WhatsApp bots powe
 It provides a flexible framework to build intelligent chatbots that can handle conversations, automate tasks, 
 and integrate with various LLM providers.
 
-## Features
-
-### Implemented
-
-### Upcoming
-- [~] WhatsApp integration using the whatsmeow library
-- [ ] LLM client for generating responses and managing bot behavior
-- [ ] Structured logging system
-- [ ] Support for multiple LLM providers (e.g., OpenAI, Anthropic)
-- [ ] Webhook integration for real-time event handling
-
 ## Installation
 
 1. Clone the repository:
@@ -29,6 +18,12 @@ and integrate with various LLM providers.
    ```
 
 3. Build the project:
+   via Taskfile:
+   ```
+   task prod
+   ```
+
+   or directly:
    ```
    go build -o bin/zapper ./cmd/server
    ```

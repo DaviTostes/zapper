@@ -3,6 +3,7 @@ package handler
 import (
 	"gozapper/internal/whatsapp"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,8 +42,65 @@ func HandlePanelConfig(ctx *gin.Context) {
 	ctx.HTML(http.StatusOK, "panel-config.html", nil)
 }
 
-func HandlePanelAnalysis(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "panel-analysis.html", nil)
+type Conversation struct {
+	Number string
+	Name   string
+	Status string
+}
+
+func HandlePanelCards(ctx *gin.Context) {
+	data := struct {
+		Conversations []Conversation
+	}{
+		Conversations: []Conversation{
+			{Number: "22992594565", Name: "Davi Tostes", Status: "DONE"},
+			{Number: "22988384972", Name: "Maria Eduarda", Status: "PENDING"},
+			{Number: "22992594556", Name: "Andrea Siqueira", Status: "CANCELLED"},
+			{Number: "21929293233", Name: "Jose Das Couves Almeida", Status: "TESTE"},
+		},
+	}
+
+	ctx.HTML(http.StatusOK, "panel-cards.html", data)
+}
+
+type Client struct {
+	Number string
+	Name   string
+	Status string
+}
+
+type Message struct {
+	Sender    string
+	Content   string
+	Timestamp time.Time
+}
+
+func HandlePanelDetails(ctx *gin.Context) {
+	data := struct {
+		Client   Client
+		Messages []Message
+	}{
+		Client: Client{Name: "Davi Tostes", Number: "2299259465", Status: "DONE"},
+		Messages: []Message{
+			{Sender: "bot", Content: "Ola, tudo bem?", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+			{Sender: "user", Content: "Tudo e vc?", Timestamp: time.Now()},
+			{Sender: "bot", Content: "dibas", Timestamp: time.Now()},
+		},
+	}
+
+	ctx.HTML(http.StatusOK, "panel-details.html", data)
 }
 
 func HandleNewContact(ctx *gin.Context) {

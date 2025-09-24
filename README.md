@@ -9,13 +9,11 @@ and integrate with various LLM providers.
 ### Implemented
 
 ### Upcoming
-- [ ] WhatsApp integration using the whatsmeow library
+- [~] WhatsApp integration using the whatsmeow library
 - [ ] LLM client for generating responses and managing bot behavior
 - [ ] Structured logging system
-- [ ] Advanced bot configuration endpoints (e.g., dynamic prompts, user sessions)
 - [ ] Support for multiple LLM providers (e.g., OpenAI, Anthropic)
 - [ ] Webhook integration for real-time event handling
-- [ ] Persistent storage with database support
 
 ## Installation
 
@@ -37,16 +35,10 @@ and integrate with various LLM providers.
 
 ## Usage
 
-### CLI
-Run the CLI tool for local bot management:
+### Server
+Run the server for local bot management:
 ```
 ./bin/zapper --help
-```
-
-### API
-Start the API server:
-```
-./bin/api
 ```
 
 For detailed API documentation, refer to the [internal/handler](internal/handler) package.

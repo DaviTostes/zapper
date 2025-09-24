@@ -44,3 +44,7 @@ func HandlePanelConfig(ctx *gin.Context) {
 func HandlePanelAnalysis(ctx *gin.Context) {
 	ctx.HTML(http.StatusOK, "panel-analysis.html", nil)
 }
+
+func HandleNewContact(ctx *gin.Context) {
+	ctx.HTML(http.StatusOK, "panel-new-contact.html", nil)
+}

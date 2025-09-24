@@ -14,39 +14,23 @@
 </header>
 
 {{if .IsConnected}}
-<div id="tab-content" class="p-4 sm:p-6 flex-1 overflow-y-auto">
-  <div id="instances" class="tab-content">
-    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
-      <h2 class="text-2xl font-semibold text-gray-700">Minha Instância</h2>
-    </div>
-    <div id="instances-grid" class="grid grid-cols-1 gap-6">
-      <div class="instance-card bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col"
-        data-instance-name="Bot de Vendas">
-        <div class="flex justify-between items-start mb-4">
-          <div>
-            <h3 class="font-bold text-lg text-gray-800">{{.InstanceName}}</h3>
-            <!-- <p class="text-sm text-gray-500"></p> -->
-          </div>
-          <span class="bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full">Conectado</span>
-        </div>
-        <div class="flex-grow flex items-center justify-center text-center text-gray-500 bg-gray-50 rounded-lg p-4">
-          <div>
-            <i data-lucide="check-circle-2" class="w-16 h-16 text-emerald-400 mx-auto mb-2"></i>
-            <p>Sessão ativa.</p>
-          </div>
-        </div>
-        <div class="mt-4 flex space-x-2">
-          <button
-            class="configure-btn w-full bg-gray-100 text-gray-700 hover:bg-gray-200 font-semibold py-2 rounded-lg text-sm">Configurar</button>
-          <button
-            class="analyze-btn w-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-semibold py-2 rounded-lg text-sm">Analisar</button>
-        </div>
-      </div>
-    </div>
+<div id="tab-content" class="tab-content flex flex-col h-full">
+  <div class="flex-0 flex flex-col sm:flex-row gap-3 pt-2 px-4 border-t border-gray-100">
+    <button hx-get="partials/panel-config" hx-target="#tab-content"
+      class="flex-1 flex items-center justify-center space-x-2 bg-green-50 text-green-700 hover:bg-green-100 font-semibold py-3 rounded-xl text-sm transition-colors border border-green-200">
+      <i data-lucide="settings" class="w-5 h-5"></i>
+      <span>Configurar</span>
+    </button>
+    <button hx-get="partials/panel-new-contact" hx-target="#tab-content"
+      class="flex-1 flex items-center justify-center space-x-2 bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold py-3 rounded-xl text-sm transition-colors border border-blue-200">
+      <i data-lucide="user-plus" class="w-5 h-5"></i>
+      <span>Novo Contato</span>
+    </button>
   </div>
 </div>
 {{else}}
-<div id="tab-content" hx-get="/partials/panel" hx-target="#main-content" hx-trigger="every 15s" class="p-4 sm:p-6 flex-1 overflow-y-auto">
+<div id="tab-content" hx-get="/partials/panel" hx-target="#main-content" hx-trigger="every 15s"
+  class="p-4 sm:p-6 flex-1 overflow-y-auto">
   <div class="flex-1 p-6">
     <div class="max-w-md mx-auto">
       <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Nova Instância</h1>

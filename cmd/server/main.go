@@ -2,6 +2,7 @@ package main
 
 import (
 	"gozapper/internal/handler"
+	"gozapper/internal/whatsapp"
 	"net/http"
 	"os"
 
@@ -9,6 +10,8 @@ import (
 )
 
 func main() {
+	whatsapp.ConnectToWhatsApp()
+
 	router := gin.Default()
 
 	router.Static("/static", "web/static")
@@ -27,6 +30,7 @@ func main() {
 	hxGroup.GET("/panel", handler.HandlePanel)
 	hxGroup.GET("/panel-config", handler.HandlePanelConfig)
 	hxGroup.GET("/panel-analysis", handler.HandlePanelAnalysis)
+	hxGroup.GET("/panel-new-contact", handler.HandleNewContact)
 
 	router.Run(":" + os.Getenv("PORT"))
 }

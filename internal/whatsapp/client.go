@@ -20,7 +20,7 @@ var (
 )
 
 func IsConnected() bool {
-	return client.IsConnected()
+	return client.IsLoggedIn()
 }
 
 func GetPushName() string {
@@ -89,38 +89,28 @@ func SendMessage(recipientJID string, message string) {
 	}
 }
 
-func eventHandler(evt interface{}) {
+func eventHandler(evt any) {
 	switch v := evt.(type) {
-	case *events.Connected:
-		fmt.Println("✅ Connection successful")
-
 	case *events.Message:
-		sender := v.Info.Sender.String()
-		groupName := ""
+		// Doesn't support groups yet
 		if v.Info.IsGroup {
-			groupInfo, err := client.GetGroupInfo(v.Info.Chat)
-			if err != nil {
-				groupName = "an unknown group"
-			} else {
-				groupName = "'" + groupInfo.Name + "'"
-			}
-			fmt.Printf("Received a group message in %s from %s\n", groupName, sender)
-		} else {
-			fmt.Printf("Received a direct message from %s\n", sender)
+			break
 		}
 
+		sender := v.Info.Sender.String()
+		fmt.Printf("Received a direct message from %s\n", sender)
+
 		messageText := ""
+
+		// Doesn't support images yet
+		if imgMsg := v.Message.GetImageMessage(); imgMsg != nil {
+			break
+		}
+
 		if msg := v.Message.GetConversation(); msg != "" {
 			messageText = msg
 		} else if extMsg := v.Message.GetExtendedTextMessage(); extMsg != nil {
 			messageText = extMsg.GetText()
-		} else if imgMsg := v.Message.GetImageMessage(); imgMsg != nil {
-			messageText = imgMsg.GetCaption()
-			if messageText != "" {
-				messageText = "[Image] " + messageText
-			} else {
-				messageText = "[Image]"
-			}
 		} else {
 			messageText = "[Unsupported message type]"
 		}
@@ -136,6 +126,6 @@ func eventHandler(evt interface{}) {
 		fmt.Printf("Received a receipt for message %s from %s: %s\n", v.MessageIDs, v.MessageSource, v.Type)
 
 	case *events.Disconnected:
-		fmt.Println("❌ Disconnected from WhatsApp")
+		fmt.Println("Disconnected from WhatsApp")
 	}
 }

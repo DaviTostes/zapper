@@ -1,0 +1,38 @@
+<div class="mx-auto px-2 sm:px-6 lg:px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {{range .Conversations}}
+    <a hx-get="/partials/panel-details?number={{.Number}}" hx-target="#tab-content" hx-swap="innerHTML"
+      class="group relative flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
+      <div class="absolute inset-0 bg-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      </div>
+      <div class="relative p-6 flex-1">
+        <div class="flex items-start space-x-4 mb-4">
+          <div
+            class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+            <span class="text-white font-bold text-sm">{{formatName .Name}}</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-green-500 mb-1 line-clamp-1">{{.Name}}</h3>
+            <p class="text-sm text-gray-500 line-clamp-1">+{{.Number}}</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mt-auto">
+          {{if eq .Status "DONE"}}
+          <span
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">MARCADO</span>
+          {{else if eq .Status "PENDING"}}
+          <span
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200">PENDENTE</span>
+          {{else if eq .Status "CANCELLED"}}
+          <span
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">CANCELADO</span>
+          {{else}}
+          <span
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200">{{.Status}}</span>
+          {{end}}
+        </div>
+      </div>
+    </a>
+    {{end}}
+  </div>
+</div>
